@@ -1,8 +1,5 @@
-# GitHub Actions for Building, Testing, and Scanning .NET Project with Trivy and Aqua Security
-
 name: Build & Scan
 
-# Trigger workflow on push or pull request
 on:
   push:
     branches:
@@ -12,7 +9,6 @@ on:
       - main
 
 jobs:
-  # Job 1: Scan
   Build-and-Scan:
     runs-on: ubuntu-latest
 
@@ -21,24 +17,32 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Step 2: Install .NET SDK
+      # Step 2: Setup .NET SDK
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '9.0.x'  # You can modify this depending on your target framework
-          
+          dotnet-version: '6.0.x'
+
       # Step 3: Restore .NET dependencies
       - name: Restore .NET dependencies
-        run: dotnet restore ./src/MySampleDotNetApp/MySampleDotNetApp.csproj
+        run: dotnet restore ./MySampleDotNetApp/MySampleDotNetApp.csproj
 
-      # Step 4: Run Trivy scan (with misconfigurations, vulnerabilities, and secrets)
+      # Step 4: Build the .NET project
+      - name: Build .NET project
+        run: dotnet build ./MySampleDotNetApp/MySampleDotNetApp.csproj --configuration Release
+
+      # Step 5: Run tests (if applicable)
+      - name: Run Tests
+        run: dotnet test ./MySampleDotNetApp.Tests/MySampleDotNetApp.Tests.csproj
+
+      # Step 6: Run Trivy scan
       - name: Run Trivy scan
-        run: trivy fs --scanners misconfig,vuln,secret ./src/MySampleDotNetApp
+        run: trivy fs --scanners misconfig,vuln,secret ./MySampleDotNetApp
         env:
           AQUA_KEY: ${{ secrets.AQUA_KEY }}
           AQUA_SECRET: ${{ secrets.AQUA_SECRET }}
 
-      # Step 5: Manifest Generation (Optional, for additional Aqua Security integration)
+      # Step 7: Manifest Generation (Optional, for Aqua Security integration)
       - name: Manifest Generation
         run: |
           export BILLY_SERVER=https://billy.codesec.aquasec.com
@@ -55,11 +59,10 @@ jobs:
             --aqua-key "${{ secrets.AQUA_KEY }}" \
             --aqua-secret "${{ secrets.AQUA_SECRET }}" \
             --cspm-url "${{ env.CSPM_URL }}" \
-            --artifact-path "my-dotnet-app:${{ github.sha }}"
+            --artifact-path "my-sample-app:${{ github.sha }}"
         env:
           CSPM_URL: ${{ env.CSPM_URL }}
           AQUA_URL: ${{ env.AQUA_URL }}
           AQUA_KEY: ${{ secrets.AQUA_KEY }}
           AQUA_SECRET: ${{ secrets.AQUA_SECRET }}
           GITHUB_TOKEN: ${{ github.token }}
-
