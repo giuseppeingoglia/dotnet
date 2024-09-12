@@ -1,36 +1,26 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <AssemblyName>Grundfos.GiC.AlertService.Observability.Api</AssemblyName>
-    <RootNamespace>Grundfos.GiC.AlertService.Observability.Api</RootNamespace>
+    <AssemblyName>MySampleApp.Api</AssemblyName>
+    <RootNamespace>MySampleApp.Api</RootNamespace>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
-    <AssemblyName>Grundfos.GiC.AlertService.Observability.Api</AssemblyName>
-    <RootNamespace>Grundfos.GiC.AlertService.Observability.Api</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Grundfos.GiC.AlertService" Version="6.0.14" />
-    <PackageReference Include="Grundfos.GiC.AlertService.Alerting.Integration" Version="3.0.8" />
-    <PackageReference Include="Grundfos.GiC.Messaging.Envelope" Version="0.1.0.54810" />
-    <PackageReference Include="Grundfos.GiCV2.AccountService.Integration" Version="7.0.11" />
-    <PackageReference Include="Grundfos.GiCV2.Shared.Azure.ServiceBus" Version="6.2.3" />
-    <PackageReference Include="Grundfos.GiCV2.Shared.Http.AspNetCore" Version="6.2.3" />
+    <!-- Common Package References -->
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.10" />
-    <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="6.4.0" />
-    <PackageReference Include="Microsoft.Extensions.PlatformAbstractions" Version="1.1.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.20.1" />
-    <PackageReference Include="Serilog" Version="3.1.1" />
-    <PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0" />
-    <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="10.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.7" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-    <PackageReference Include="prometheus-net" Version="8.2.1" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Grundfos.GiCV2.AlertService.Observability.EventPublishers\AlertService.Observability.EventPublishers.csproj" />
-    <ProjectReference Include="..\Grundfos.GiCV2.AlertService.Observability.Repositories\AlertService.Observability.Repositories.csproj" />
-    <ProjectReference Include="..\Grundfos.GiCV2.AlertService.Observability\AlertService.Observability.csproj" />
+    <PackageReference Include="Serilog" Version="2.10.0" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="3.1.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
+    <PackageReference Include="FluentValidation" Version="11.2.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
+    <PackageReference Include="NUnit" Version="3.13.3" />
+    <PackageReference Include="Moq" Version="4.20.3" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Validators\" />
