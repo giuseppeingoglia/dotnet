@@ -3,6 +3,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>MySampleApp.Api</AssemblyName>
     <RootNamespace>MySampleApp.Api</RootNamespace>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
