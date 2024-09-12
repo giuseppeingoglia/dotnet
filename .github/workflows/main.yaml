@@ -1,0 +1,96 @@
+# GitHub Actions for Building, Testing, and Scanning .NET Project with Trivy and Aqua Security
+
+name: Build & Scan
+
+# Trigger workflow on push or pull request
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  # Job 1: Build, Scan, and Push Docker Image
+  Build-and-Aqua:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Install .NET SDK
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '9.0.x'  # You can modify this depending on your target framework
+
+      # Step 3: Build the .NET project
+      - name: Build .NET project
+        run: dotnet build ./src/MySampleDotNetApp/MySampleDotNetApp.csproj --configuration Release
+
+      # Step 4: Run Aqua Pipeline Enforcer
+      - name: Pipeline Enforcer
+        uses: aquasecurity/pipeline-enforcer-action@main
+        with:
+          aqua-key: ${{ secrets.AQUA_KEY }}
+          aqua-secret: ${{ secrets.AQUA_SECRET }}
+          access-token: ${{ secrets.GITHUB_TOKEN }}
+
+      # Step 5: Set up Docker Buildx
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # Step 6: Log in to Docker Hub
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # Step 7: Build Docker image for the .NET project
+      - name: Build Docker image
+        run: docker build -t my-dotnet-app:${{ github.sha }} .
+
+      # Step 8: Run Trivy scan (with misconfigurations, vulnerabilities, and secrets)
+      - name: Run Trivy scan
+        run: trivy fs --scanners misconfig,vuln,secret ./src/MySampleDotNetApp
+        env:
+          AQUA_KEY: ${{ secrets.AQUA_KEY }}
+          AQUA_SECRET: ${{ secrets.AQUA_SECRET }}
+
+      # Step 9: Manifest Generation (Optional, for additional Aqua Security integration)
+      - name: Manifest Generation
+        run: |
+          export BILLY_SERVER=https://billy.codesec.aquasec.com
+          curl -sLo install.sh download.codesec.aquasec.com/billy/install.sh
+          curl -sLo install.sh.checksum https://github.com/argonsecurity/releases/releases/latest/download/install.sh.checksum
+          if ! cat install.sh.checksum | sha256sum -c ; then
+            echo "install.sh checksum failed"
+            exit 1
+          fi
+          BINDIR="." sh install.sh
+          rm install.sh install.sh.checksum
+          ./billy generate \
+            --access-token "${{ secrets.GITHUB_TOKEN }}" \
+            --aqua-key "${{ secrets.AQUA_KEY }}" \
+            --aqua-secret "${{ secrets.AQUA_SECRET }}" \
+            --cspm-url "${{ env.CSPM_URL }}" \
+            --artifact-path "my-dotnet-app:${{ github.sha }}"
+        env:
+          CSPM_URL: ${{ env.CSPM_URL }}
+          AQUA_URL: ${{ env.AQUA_URL }}
+          AQUA_KEY: ${{ secrets.AQUA_KEY }}
+          AQUA_SECRET: ${{ secrets.AQUA_SECRET }}
+          GITHUB_TOKEN: ${{ github.token }}
+
+      # Step 10: Tag Docker image
+      - name: Tag Docker image
+        run: docker tag my-dotnet-app:${{ github.sha }} pitonemaledetto/dotnet-sbom:${{ github.sha }}
+
+      # Step 11: Push Docker image to Docker Hub
+      - name: Push Docker image to Docker Hub
+        run: docker push pitonemaledetto/dotnet-sbom:${{ github.sha }}
+
