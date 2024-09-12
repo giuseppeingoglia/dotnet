@@ -33,10 +33,16 @@ jobs:
 
       # Step 5: Run Trivy scan
       - name: Run Trivy scan
-        run: trivy fs --scanners misconfig,vuln,secret ./src/MySampleDotNetApp
+        uses: docker://aquasec/aqua-scanner
+        with:
+          args: trivy fs --sast --scanners misconfig,vuln,secret .
         env:
           AQUA_KEY: ${{ secrets.AQUA_KEY }}
           AQUA_SECRET: ${{ secrets.AQUA_SECRET }}
+          GITHUB_TOKEN: ${{ github.token }}
+          AQUA_URL: ${{ env.AQUA_URL }}
+          CSPM_URL: ${{ env.CSPM_URL }}
+          TRIVY_RUN_AS_PLUGIN: "aqua"
 
       # Step 6: Manifest Generation (Optional, for Aqua Security integration)
       - name: Manifest Generation
