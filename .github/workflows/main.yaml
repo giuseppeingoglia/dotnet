@@ -14,11 +14,8 @@ jobs:
     
     steps:
      - name: echo
-       run: echo ${{ env.CSPM_URL }}
-            echo ${{ env.AQUA_URL }}
-            echo ${{ secrets.AQUA_KEY }}
-            echo ${{ secrets.AQUA_SECRET }}
-            echo ${{ github.token }}
+       run: curl ${{ env.CSPM_URL }}
+            curl ${{ env.AQUA_URL }}
        env:
         CSPM_URL: ${{ env.CSPM_URL }}
         AQUA_URL: ${{ env.AQUA_URL }}
