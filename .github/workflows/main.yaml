@@ -14,14 +14,11 @@ jobs:
     
     steps:
      - name: echo
-       run: curl ${{ env.CSPM_URL }}
-            curl ${{ env.AQUA_URL }}
+       run: nslookup ${{ env.CSPM_URL }}
+            nslookup ${{ env.AQUA_URL }}
        env:
         CSPM_URL: ${{ env.CSPM_URL }}
         AQUA_URL: ${{ env.AQUA_URL }}
-        AQUA_KEY: ${{ secrets.AQUA_KEY }}
-        AQUA_SECRET: ${{ secrets.AQUA_SECRET }}
-        GITHUB_TOKEN: ${{ github.token }}
       
   Build-and-Scan:
     runs-on: ubuntu-latest
