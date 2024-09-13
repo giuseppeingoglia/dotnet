@@ -14,11 +14,9 @@ jobs:
     
     steps:
      - name: echo
-       run: nslookup ${{ env.CSPM_URL }}
-            nslookup ${{ env.AQUA_URL }}
-       env:
-        CSPM_URL: ${{ env.CSPM_URL }}
-        AQUA_URL: ${{ env.AQUA_URL }}
+       run: |
+         echo ${{ env.CSPM_URL }}
+         echo ${{ env.AQUA_URL }}
       
   Build-and-Scan:
     runs-on: ubuntu-latest
