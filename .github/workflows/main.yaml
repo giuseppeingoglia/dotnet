@@ -11,12 +11,7 @@ on:
 jobs:
   Echo:
     runs-on: ubuntu-latest
-    env:
-      CSPM_URL: ${{ env.CSPM_URL }}
-      AQUA_URL: ${{ env.AQUA_URL }}
-      AQUA_KEY: ${{ secrets.AQUA_KEY }}
-      AQUA_SECRET: ${{ secrets.AQUA_SECRET }}
-      GITHUB_TOKEN: ${{ github.token }}
+    
     steps:
      - name: echo
        run: echo ${{ env.CSPM_URL }}
@@ -24,7 +19,13 @@ jobs:
             echo ${{ secrets.AQUA_KEY }}
             echo ${{ secrets.AQUA_SECRET }}
             echo ${{ github.token }}
-            
+       env:
+        CSPM_URL: ${{ env.CSPM_URL }}
+        AQUA_URL: ${{ env.AQUA_URL }}
+        AQUA_KEY: ${{ secrets.AQUA_KEY }}
+        AQUA_SECRET: ${{ secrets.AQUA_SECRET }}
+        GITHUB_TOKEN: ${{ github.token }}
+      
   Build-and-Scan:
     runs-on: ubuntu-latest
 
