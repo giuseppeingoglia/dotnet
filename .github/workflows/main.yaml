@@ -10,7 +10,9 @@ jobs:
     
     steps:
      - name: echo
-       run: printenv
+       run: |
+         echo "CSPM_URL: $CSPM_URL"
+         echo "AQUA_URL: $AQUA_URL"
       
   Build-and-Scan:
     runs-on: ubuntu-latest
