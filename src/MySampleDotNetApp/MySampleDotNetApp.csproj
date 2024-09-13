@@ -4,6 +4,7 @@
     <AssemblyName>MySampleApp.Api</AssemblyName>
     <RootNamespace>MySampleApp.Api</RootNamespace>
     <Nullable>enable</Nullable>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
