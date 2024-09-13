@@ -14,9 +14,7 @@ jobs:
     
     steps:
      - name: echo
-       run: |
-         echo ${{ env.CSPM_URL }}
-         echo ${{ env.AQUA_URL }}
+       run: printenv
       
   Build-and-Scan:
     runs-on: ubuntu-latest
