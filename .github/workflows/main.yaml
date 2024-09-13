@@ -5,15 +5,6 @@ on:
   pull_request:
 
 jobs:
-  Echo:
-    runs-on: ubuntu-latest
-    
-    steps:
-     - name: echo
-       run: |
-         echo "CSPM_URL: $CSPM_URL"
-         echo "AQUA_URL: $AQUA_URL"
-      
   Build-and-Scan:
     runs-on: ubuntu-latest
 
@@ -45,8 +36,8 @@ jobs:
           AQUA_KEY: ${{ secrets.AQUA_KEY }}
           AQUA_SECRET: ${{ secrets.AQUA_SECRET }}
           GITHUB_TOKEN: ${{ github.token }}
-          AQUA_URL: ${{ env.AQUA_URL }}
-          CSPM_URL: ${{ env.CSPM_URL }}
+          AQUA_URL: https://api.eu-1.supply-chain.cloud.aquasec.com
+          CSPM_URL: https://eu-1.api.cloudsploit.com
           TRIVY_RUN_AS_PLUGIN: "aqua"
 
       # Step 6: Manifest Generation (Optional, for Aqua Security integration)
