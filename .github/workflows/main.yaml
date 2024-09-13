@@ -59,8 +59,8 @@ jobs:
             --cspm-url "${{ env.CSPM_URL }}" \
             --artifact-path "my-sample-app:${{ github.sha }}"
         env:
-          CSPM_URL: ${{ env.CSPM_URL }}
-          AQUA_URL: ${{ env.AQUA_URL }}
+          CSPM_URL: https://eu-1.api.cloudsploit.com
+          AQUA_URL: https://api.eu-1.supply-chain.cloud.aquasec.com
           AQUA_KEY: ${{ secrets.AQUA_KEY }}
           AQUA_SECRET: ${{ secrets.AQUA_SECRET }}
           GITHUB_TOKEN: ${{ github.token }}
