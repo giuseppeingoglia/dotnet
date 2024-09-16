@@ -20,12 +20,12 @@ jobs:
           dotnet-version: '9.0'
 
       # Step 3: Restore .NET dependencies
-      - name: Restore .NET dependencies
-        run: dotnet restore ./src/MySampleDotNetApp/MySampleDotNetApp.csproj
+      #- name: Restore .NET dependencies
+      #  run: dotnet restore ./src/MySampleDotNetApp/MySampleDotNetApp.csproj
 
       # Step 4: Build the .NET project
-      - name: Build .NET project
-        run: dotnet build ./src/MySampleDotNetApp/MySampleDotNetApp.csproj --configuration Release
+      #- name: Build .NET project
+       # run: dotnet build ./src/MySampleDotNetApp/MySampleDotNetApp.csproj --configuration Release
 
       # Step 5: Run Trivy scan
       - name: Run Trivy scan
